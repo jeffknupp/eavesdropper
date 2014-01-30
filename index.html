@@ -1,0 +1,23 @@
+<!doctype html>
+<html ng-app="eavesApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+    <script src="/js/controllers.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+  <div class="container">
+    <h2>Mentions</h2>
+    <div ng-controller="MentionCtrl">
+      <span>{{unread()}} of {{mentions.length}} unread</span>
+      <ul class="unstyled">
+        <li ng-repeat="mention in mentions">
+        <span class="mention-{{ mention.read }}">{{ mention.read ? "read" : "unread"}}</span>
+              <p>{{ mention.text }}</p>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </body>
+</html>
