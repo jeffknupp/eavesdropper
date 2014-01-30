@@ -1,0 +1,43 @@
+<!doctype html>
+<html ng-app="eavesApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+    <script src="../static/js/controllers.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+  </head>
+  <body>
+
+  <div class="container" ng-controller="MentionCtrl">
+    <h2>Mentions</h2>
+    <div class="row">
+        <div class="col-md-8">
+
+
+            <p>Search: <input ng-model="query"></p>
+            <p>Order By:</p>
+            <select ng-model="orderProp">
+                <option value="found">Newest</option>
+                <option value="name">Alphabetical</option>
+            </select>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" >
+            {% raw %}
+                <span>{{unread()}} of {{mentions.length}} unread</span>
+                <ul class="unstyled">
+                    <li ng-repeat="mention in mentions | filter:query | orderBy:orderProp">
+                    <span class="mention-{{ mention.read }}">{{ mention.read ? "read" : "unread"}}</span>
+                        <p>{{ mention.text }}</p>
+                    </li>
+                </ul>
+            {% endraw %}
+        </div>
+    </div>
+</div>
+  </body>
+</html>

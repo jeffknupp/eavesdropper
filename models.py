@@ -31,3 +31,15 @@ class Mention(Base):
     def __str__(self):
         """Return the string representation of a mention."""
         return self.text
+
+    def to_json(self):
+        return {
+                'id': self.id,
+                'domain_id': self.domain_id,
+                'source': self.source.name,
+                'text': self.text,
+                'associated_user': self.associated_user,
+                'seen': self.seen,
+                'recorded_at': str(self.recorded_at),
+                'occurred_at': str(self.occurred_at)}
+
