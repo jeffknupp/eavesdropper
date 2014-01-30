@@ -4,7 +4,7 @@ import sys
 import json
 import pprint
 
-from flask import Flask, make_response, render_template
+from flask import Flask, make_response, render_template, jsonify, send_from_directory
 from flask.ext.sqlalchemy import SQLAlchemy
 from birdy.twitter import AppClient
 
@@ -23,6 +23,10 @@ db = SQLAlchemy(app)
 def index():
     return render_template('index.html')
 
+@app.route('/partials/<name>')
+def partials(name):
+    return send_from_directory('partials', name)
+
 def get_twitter_mentions():
     response = client.api.search.tweets.get(q='jeffknupp.com', count=100)
     statuses = response.data.statuses
@@ -38,9 +42,17 @@ def get_twitter_mentions():
             session.add(m)
     session.commit()
 
+@app.route('/read/<id>', methods=['POST'])
+def read(id):
+    session = db.session()
+    mention = session.query(Mention).get(id)
+    mention.seen = True
+    session.add(mention)
+    session.commit()
+    return jsonify({})
+
 @app.route('/mentions')
 def show_mentions():
-    get_twitter_mentions()
     session = db.session()
     mentions = session.query(Mention).all()
     values = [mention.to_json() for mention in mentions]
