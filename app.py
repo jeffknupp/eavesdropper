@@ -3,17 +3,14 @@
 import sys
 import json
 import pprint
+import argparse
 
 from flask import Flask, make_response, render_template, jsonify, send_from_directory
 from flask.ext.sqlalchemy import SQLAlchemy
 from birdy.twitter import AppClient
 
 from models import Source, Mention, Base
-
-CONSUMER_KEY = 'XCvzOpRBPjKoWFMSYnHqHg'
-CONSUMER_SECRET = 'flO2rrzu6xss6ubnJUS8hp0nhgbSYp8cjjCjnaHCzG8'
-client = AppClient(CONSUMER_KEY, CONSUMER_SECRET)
-access_token = client.get_access_token()
+from twitter import get_twitter_mentions
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:///sqlite.db'
@@ -27,20 +24,12 @@ def index():
 def partials(name):
     return send_from_directory('partials', name)
 
-def get_twitter_mentions():
-    response = client.api.search.tweets.get(q='jeffknupp.com', count=100)
-    statuses = response.data.statuses
-    session = db.session()
-    twitter = session.query(Source).get(1)
-    for status in statuses:
-        if not session.query(Mention).filter(Mention.domain_id==status.id_str).count():
-            m = Mention(text=status.text,
-                    associated_user='{} ({})'.format(status.user.screen_name,
-                        status.user.followers_count),
-                    source=twitter,
-                    domain_id=status.id_str)
-            session.add(m)
-    session.commit()
+@app.route('/update/<source>', methods=['POST'])
+def get_updates_for_source(source):
+    if source == 'twitter':
+        updates = get_twitter_mentions()
+        return jsonify({'updates': updates})
+
 
 @app.route('/read/<id>', methods=['POST'])
 def read(id):
@@ -61,7 +50,6 @@ def show_mentions():
     return response
     
 def main():
-    app.run(debug=True)
-
+    app.run(host="0.0.0.0", port=8080, debug=True)
 if __name__ == '__main__':
     sys.exit(main())
