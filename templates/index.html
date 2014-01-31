@@ -10,9 +10,8 @@
   </head>
   <body>
 <div class="container">
-    <h2>Mentions</h2>
     <div class="row">
-        <div class="col-md-12" >
+        <div class="col-md-6 col-md-offset-3" >
             <div id="content">
             </div>
             <script type="text/jsx">
@@ -83,13 +82,15 @@
                 },
                 render: function() {
                     return (
-                        <div className={this.state.seen} onClick={this.markRead}>
-                            <h2>Mention</h2>
-                            <h4 className="associatedUser">
-                                {this.props.mention.associated_user}
-                            </h4>
-                            {this.props.mention.text}
-                        </div>
+                            <div className={this.state.seen ? true : "well" } onClick={this.markRead}>
+                                <div className="pull-right">
+                                    <h6>
+                                    {this.props.mention.source}
+                                    </h6>
+                                </div>
+                                <h4>{this.props.mention.associated_user} <small> &nbsp; at {this.props.mention.occurred_at}</small></h4>
+                                    <p>{this.props.mention.text}</p>
+                            </div>
                     );
                 }
             });

@@ -1,6 +1,8 @@
+.card {
+    border: 1px;
+}
+
 .true {
     text-color: lightGrey;
-}
-.false {
-    font-weight: 700;
+    padding-bottom: 10px;
 }
