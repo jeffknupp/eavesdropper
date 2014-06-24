@@ -2,9 +2,9 @@ from sqlalchemy import create_engine
 from models import Source, Mention, Base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///sqlite.db')
+engine = create_engine('postgresql+psycopg2://docker:docker@db/docker')
 Session = sessionmaker(bind=engine)
-Base.metadata.create_all(engine) 
+Base.metadata.create_all(engine)
 session = Session()
 
 s = Source(id=1, name='Twitter')

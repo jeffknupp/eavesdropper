@@ -13,7 +13,7 @@ from models import Source, Mention, Base
 from twitter import get_twitter_mentions
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2:///docker:db/docker'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://docker:docker@db/docker'
 db = SQLAlchemy(app)
 
 @app.route('/')
