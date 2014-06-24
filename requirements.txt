@@ -1,5 +1,11 @@
+Flask==0.10.1
+Flask-SQLAlchemy==1.0
+Jinja2==2.7.2
+MarkupSafe==0.18
 SQLAlchemy==0.9.1
+Werkzeug==0.9.4
 birdy==0.2
+itsdangerous==0.23
 oauthlib==0.6.1
 requests==2.2.1
 requests-oauthlib==0.4.0
