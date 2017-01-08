@@ -1,0 +1,14 @@
+.MentionList {
+    margin: 0;
+    display: inherit;
+}
+
+.MentionList ul {
+    margin: 0;
+    padding: 0;
+}
+
+.MentionList ul li {
+    list-style: none;
+    border-bottom: 1px solid white;
+}

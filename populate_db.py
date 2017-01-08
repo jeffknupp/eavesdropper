@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from models import Source, Mention, Base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('postgresql+psycopg2://docker:docker@db/docker')
+engine = create_engine('postgresql+psycopg2://localhost/edp')
 Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 session = Session()

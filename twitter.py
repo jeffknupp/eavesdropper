@@ -8,7 +8,7 @@ from birdy.twitter import AppClient
 
 from models import Source, Mention
 
-engine = create_engine('sqlite+pysqlite:///sqlite.db')
+engine = create_engine('postgresql+psycopg2://localhost/edp')
 from sqlalchemy.orm import sessionmaker
 Session = sessionmaker(bind=engine)
 

@@ -2,31 +2,29 @@
 
 import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
 
-Base = declarative_base()
+db = SQLAlchemy()
 
-class Source(Base):
+class Source(db.Model):
 
     __tablename__ = 'source'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String)
 
-class Mention(Base):
+class Mention(db.Model):
     """A Mention from a particular source."""
 
     __tablename__ = 'mention'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    domain_id = Column(String)
-    source_id = Column(Integer, ForeignKey('source.id'))
-    source = relationship(Source)
-    text = Column(String)
-    associated_user = Column(String)
-    seen = Column(Boolean, default=False)
-    recorded_at = Column(DateTime, default=datetime.datetime.now)
-    occurred_at = Column(DateTime, default=datetime.datetime.now)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    domain_id = db.Column(db.String)
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
+    source = db.relationship(Source)
+    text = db.Column(db.String)
+    associated_user = db.Column(db.String)
+    seen = db.Column(db.Boolean, default=False)
+    recorded_at = db.Column(db.DateTime, default=datetime.datetime.now)
+    occurred_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __str__(self):
         """Return the string representation of a mention."""

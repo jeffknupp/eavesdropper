@@ -6,15 +6,15 @@ import pprint
 import argparse
 
 from flask import Flask, make_response, render_template, jsonify, send_from_directory
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from birdy.twitter import AppClient
 
-from models import Source, Mention, Base
+from models import Source, Mention, db
 from twitter import get_twitter_mentions
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://docker:docker@db/docker'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://localhost/edp'
+db.init_app(app)
 
 @app.route('/')
 def index():
@@ -33,21 +33,15 @@ def get_updates_for_source(source):
 
 @app.route('/read/<id>', methods=['POST'])
 def read(id):
-    session = db.session()
-    mention = session.query(Mention).get(id)
+    mention = Mention.query.get(id)
     mention.seen = True
-    session.add(mention)
-    session.commit()
-    return jsonify({})
+    db.session.add(mention)
+    db.session.commit()
+    return jsonify({}), 204
 
 @app.route('/mentions')
 def show_mentions():
-    session = db.session()
-    mentions = session.query(Mention).all()
-    values = [mention.to_json() for mention in mentions]
-    response = make_response()
-    response.data = json.dumps(values)
-    return response
+    return json.dumps([m.to_json() for m in Mention.query.all()])
     
 def main():
     app.run(host="0.0.0.0", port=8080, debug=True)
